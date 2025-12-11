@@ -67,7 +67,7 @@ public class CatalogoActivity extends AppCompatActivity {
 
     private void cargarProductos() {
         // TODO: Obtener productos desde productoRepository.obtenerTodos() y mostrarlos en el ListView
-        productos = null; // productoRepository.obtenerTodos();
+        productos = productoRepository.obtenerTodos();
         if (productos == null) {
             Toast.makeText(this, "TODO: Implementar carga de productos", Toast.LENGTH_SHORT).show();
             return;

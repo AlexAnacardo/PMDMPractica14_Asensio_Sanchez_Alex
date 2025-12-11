@@ -1,6 +1,7 @@
 package es.cm.dam.dos.pmdm.practica14.datos;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import java.util.ArrayList;
@@ -22,7 +23,20 @@ public class ProductoRepository {
     public List<Producto> obtenerTodos() {
         List<Producto> lista = new ArrayList<>();
         SQLiteDatabase db = helper.getReadableDatabase();
-        // TODO: Consultar la tabla productos y rellenar la lista
+
+        Cursor cursor = db.rawQuery("select * from Productos", null);
+
+        if(cursor!=null && cursor.moveToFirst()){
+            do{
+                lista.add(new Producto(
+                        cursor.getInt(cursor.getColumnIndexOrThrow("id_producto")),
+                        cursor.getString(cursor.getColumnIndexOrThrow("nombre")),
+                        cursor.getFloat(cursor.getColumnIndexOrThrow("precio")),
+                        cursor.getString(cursor.getColumnIndexOrThrow("descripcion"))
+                ));
+            }while(cursor.moveToNext());
+        }
+
         return lista;
     }
 
