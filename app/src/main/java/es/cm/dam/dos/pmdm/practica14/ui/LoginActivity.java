@@ -41,11 +41,10 @@ public class LoginActivity extends AppCompatActivity {
             return;
         }
 
-        // TODO: Llamar a usuarioRepository.login(usuario, contrasena) y comprobar resultado
-        Usuario u = null; // usuarioRepository.login(usuario, contrasena);
+        Usuario u = usuarioRepository.login(usuario, contrasena);
 
         if (u == null) {
-            Toast.makeText(this, "Credenciales incorrectas (TODO implementar)", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Credenciales incorrectas", Toast.LENGTH_SHORT).show();
         } else {
             Toast.makeText(this, "Bienvenido, " + u.getNombre(), Toast.LENGTH_SHORT).show();
             Intent i = new Intent(this, CatalogoActivity.class);

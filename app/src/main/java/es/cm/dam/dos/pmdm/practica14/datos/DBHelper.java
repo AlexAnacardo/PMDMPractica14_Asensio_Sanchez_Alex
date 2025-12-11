@@ -16,7 +16,7 @@ public class DBHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
 
-        db.setForeignKeyConstraintsEnabled(true);
+
 
         db.execSQL("create table Usuarios(id_usuario integer primary key autoincrement," +
                 "usuario text," +
@@ -35,8 +35,8 @@ public class DBHelper extends SQLiteOpenHelper {
                 "foreign key(id_usuario) references Usuarios(id_usuario)," +
                 "foreign key(id_producto) references Productos(id_producto))");
 
-        db.execSQL("insert into Usuarios values(1, 'user1', 'pass1', 'Alex')");
-        db.execSQL("insert into Usuarios values(1, 'user2', 'pass2', 'Asensio')");
+        db.execSQL("insert into Usuarios(usuario, contrasenia, nombre) values('user1', 'pass1', 'Alex')");
+        db.execSQL("insert into Usuarios(usuario, contrasenia, nombre) values('user2', 'pass2', 'Asensio')");
 
         db.execSQL("insert into Productos values(1, 'Cuaderno A4 rayado', 2.50, 'Cuaderno de 80 hojas, tapa blanda')");
         db.execSQL("insert into Productos values(2, 'Bolígrafo azul', 0.80, 'Bolígrafo de tinta azul punta fina')");
@@ -58,5 +58,11 @@ public class DBHelper extends SQLiteOpenHelper {
         db.execSQL("drop table if exists Carrito");
 
         this.onCreate(db);
+    }
+
+    @Override
+    public void onConfigure(SQLiteDatabase db) {
+        super.onConfigure(db);
+        db.setForeignKeyConstraintsEnabled(true);
     }
 }
