@@ -39,7 +39,7 @@ public class CarritoRepository {
         }
         else{
             String[] argumentosInsertar = {idUsuario+"", idProducto+"", "1"};
-            db.execSQL("insert into Carrito values(?,?,?)", argumentosInsertar);
+            db.execSQL("insert into Carrito(id_usuario, id_producto, cantidad) values(?,?,?)", argumentosInsertar);
         }
     }
 
@@ -55,7 +55,7 @@ public class CarritoRepository {
 
         String[] argumentos = {idUsuario+""};
         Cursor cursor = db.rawQuery(
-                "SELECT c.id_usuario, c.id_producto, p.nombre, p.precio, c.cantidad " +
+                "SELECT c.id_carrito, c.id_usuario, c.id_producto, p.nombre, p.precio, c.cantidad " +
                         "FROM Carrito c " +
                         "JOIN Productos p ON c.id_producto = p.id_producto " +
                         "WHERE c.id_usuario = ?",
@@ -63,18 +63,15 @@ public class CarritoRepository {
         );
 
         if(cursor!=null && cursor.moveToFirst()){
-            int contador = 1;
             do{
                 lista.add(new ElementoCarrito(
-                        contador,
+                        cursor.getInt(cursor.getColumnIndexOrThrow("id_carrito")),
                         cursor.getInt(cursor.getColumnIndexOrThrow("id_usuario")),
                         cursor.getInt(cursor.getColumnIndexOrThrow("id_producto")),
                         cursor.getString(cursor.getColumnIndexOrThrow("nombre")),
                         cursor.getFloat(cursor.getColumnIndexOrThrow("precio")),
                         cursor.getInt(cursor.getColumnIndexOrThrow("cantidad"))
                 ));
-
-                contador++;
             }while(cursor.moveToNext());
         }
 
@@ -87,6 +84,14 @@ public class CarritoRepository {
      */
     public void actualizarCantidad(long idCarrito, int nuevaCantidad) {
         SQLiteDatabase db = helper.getWritableDatabase();
+
+        if(nuevaCantidad<=0){
+            this.eliminarElemento(idCarrito);
+        }else{
+            String[] argumentos = {nuevaCantidad+"", idCarrito+""};
+            db.execSQL("update Carrito set cantidad = ? where id_carrito = ?", argumentos);
+        }
+
         // TODO: Si nuevaCantidad <= 0 -> DELETE
         // TODO: Si nuevaCantidad > 0 -> UPDATE cantidad
     }
@@ -96,6 +101,7 @@ public class CarritoRepository {
      */
     public void eliminarElemento(long idCarrito) {
         SQLiteDatabase db = helper.getWritableDatabase();
-        // TODO: DELETE FROM carrito WHERE id_carrito = ?
+        String[] argumentos = {idCarrito+""};
+        db.execSQL("delete from Carrito where id_carrito = ?", argumentos);
     }
 }

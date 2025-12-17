@@ -98,17 +98,18 @@ public class CarritoActivity extends AppCompatActivity {
         switch (itemMenu.getItemId()) {
             case MENU_MAS:
                 // TODO: Llamar a carritoRepository.actualizarCantidad con cantidad+1
-                Toast.makeText(this, "TODO: +1 a " + elem.getNombreProducto(), Toast.LENGTH_SHORT).show();
+
+                carritoRepository.actualizarCantidad(elem.getId(), elem.getCantidad()+1);
                 cargarCarrito();
                 return true;
             case MENU_MENOS:
                 // TODO: Llamar a carritoRepository.actualizarCantidad con cantidad-1 (o eliminar si <=0)
-                Toast.makeText(this, "TODO: -1 a " + elem.getNombreProducto(), Toast.LENGTH_SHORT).show();
+                carritoRepository.actualizarCantidad(elem.getId(), elem.getCantidad()-1);
                 cargarCarrito();
                 return true;
             case MENU_ELIMINAR:
                 // TODO: Llamar a carritoRepository.eliminarElemento para eliminar la línea
-                Toast.makeText(this, "TODO: eliminar " + elem.getNombreProducto(), Toast.LENGTH_SHORT).show();
+                carritoRepository.eliminarElemento(elem.getId());
                 cargarCarrito();
                 return true;
         }
