@@ -35,11 +35,11 @@ public class CarritoRepository {
 
             String[] argumentosActualizar = {cantidad+"", idUsuario+"", idProducto+""};
 
-            db.rawQuery("update Carrito set cantidad = ? where id_usuario = ? and id_producto = ?", argumentosActualizar);
+            db.execSQL("update Carrito set cantidad = ? where id_usuario = ? and id_producto = ?", argumentosActualizar);
         }
         else{
             String[] argumentosInsertar = {idUsuario+"", idProducto+"", "1"};
-            db.rawQuery("insert into Carrito values(?,?,?)", argumentosInsertar);
+            db.execSQL("insert into Carrito values(?,?,?)", argumentosInsertar);
         }
     }
 
@@ -52,6 +52,32 @@ public class CarritoRepository {
         SQLiteDatabase db = helper.getReadableDatabase();
         // TODO: Hacer JOIN entre carrito y productos para obtener:
         // id_carrito, id_usuario, id_producto, nombre, precio, cantidad
+
+        String[] argumentos = {idUsuario+""};
+        Cursor cursor = db.rawQuery(
+                "SELECT c.id_usuario, c.id_producto, p.nombre, p.precio, c.cantidad " +
+                        "FROM Carrito c " +
+                        "JOIN Productos p ON c.id_producto = p.id_producto " +
+                        "WHERE c.id_usuario = ?",
+                argumentos
+        );
+
+        if(cursor!=null && cursor.moveToFirst()){
+            int contador = 1;
+            do{
+                lista.add(new ElementoCarrito(
+                        contador,
+                        cursor.getInt(cursor.getColumnIndexOrThrow("id_usuario")),
+                        cursor.getInt(cursor.getColumnIndexOrThrow("id_producto")),
+                        cursor.getString(cursor.getColumnIndexOrThrow("nombre")),
+                        cursor.getFloat(cursor.getColumnIndexOrThrow("precio")),
+                        cursor.getInt(cursor.getColumnIndexOrThrow("cantidad"))
+                ));
+
+                contador++;
+            }while(cursor.moveToNext());
+        }
+
         return lista;
     }
 

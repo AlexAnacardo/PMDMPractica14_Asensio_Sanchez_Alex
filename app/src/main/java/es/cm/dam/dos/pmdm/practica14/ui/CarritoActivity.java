@@ -58,8 +58,7 @@ public class CarritoActivity extends AppCompatActivity {
     }
 
     private void cargarCarrito() {
-        // TODO: Obtener lista de ElementoCarrito desde carritoRepository.obtenerCarritoDeUsuario(idUsuario)
-        elementos = null;
+        elementos = carritoRepository.obtenerCarritoDeUsuario(idUsuario);
         if (elementos == null) {
             Toast.makeText(this, "TODO: Implementar carga de carrito", Toast.LENGTH_SHORT).show();
             return;
@@ -68,8 +67,10 @@ public class CarritoActivity extends AppCompatActivity {
                 android.R.layout.simple_list_item_1, elementos);
         listaCarrito.setAdapter(adapter);
 
-        // TODO: Calcular el total del carrito sumando getTotalLinea() de cada elemento
         double total = 0;
+        for(ElementoCarrito c: elementos){
+            total+=c.getTotalLinea();
+        }
         txtTotalCarrito.setText("Total: " + total + " €");
     }
 
