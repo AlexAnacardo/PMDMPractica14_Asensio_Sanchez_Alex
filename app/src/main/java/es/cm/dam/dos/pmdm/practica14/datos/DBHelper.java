@@ -7,7 +7,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class DBHelper extends SQLiteOpenHelper {
 
     public static final String NOMBRE_BD = "papeleria.db";
-    public static final int VERSION_BD = 1;
+    public static final int VERSION_BD = 2;
 
     public DBHelper(Context context) {
         super(context, NOMBRE_BD, null, VERSION_BD);
@@ -28,12 +28,13 @@ public class DBHelper extends SQLiteOpenHelper {
                 "precio float," +
                 "descripcion text)");
 
-        db.execSQL("create table Carrito(id_carrito integer primary key autoincrement," +
+        db.execSQL("create table Carrito(" +
                 "id_usuario integer," +
                 "id_producto integer," +
                 "cantidad integer," +
                 "foreign key(id_usuario) references Usuarios(id_usuario)," +
-                "foreign key(id_producto) references Productos(id_producto))");
+                "foreign key(id_producto) references Productos(id_producto),"+
+                "primary key(id_usuario,id_producto))");
 
         db.execSQL("insert into Usuarios(usuario, contrasenia, nombre) values('user1', 'pass1', 'Alex')");
         db.execSQL("insert into Usuarios(usuario, contrasenia, nombre) values('user2', 'pass2', 'Asensio')");

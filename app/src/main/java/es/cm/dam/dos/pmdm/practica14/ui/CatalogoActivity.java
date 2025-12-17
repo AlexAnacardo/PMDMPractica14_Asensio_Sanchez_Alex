@@ -66,7 +66,7 @@ public class CatalogoActivity extends AppCompatActivity {
     }
 
     private void cargarProductos() {
-        // TODO: Obtener productos desde productoRepository.obtenerTodos() y mostrarlos en el ListView
+
         productos = productoRepository.obtenerTodos();
         if (productos == null) {
             Toast.makeText(this, "TODO: Implementar carga de productos", Toast.LENGTH_SHORT).show();
@@ -96,8 +96,7 @@ public class CatalogoActivity extends AppCompatActivity {
         if (item.getItemId() == MENU_ANADIR_CARRITO) {
             if (productos == null) return true;
             Producto p = productos.get(info.position);
-            // TODO: Llamar a carritoRepository.anadirAlCarrito(idUsuario, p.getId())
-            Toast.makeText(this, "TODO: Añadir " + p.getNombre() + " al carrito", Toast.LENGTH_SHORT).show();
+            carritoRepository.anadirAlCarrito(idUsuario, p.getId());
             return true;
         }
         return super.onContextItemSelected(item);

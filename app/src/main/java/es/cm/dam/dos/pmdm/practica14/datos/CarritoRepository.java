@@ -1,12 +1,14 @@
 package es.cm.dam.dos.pmdm.practica14.datos;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import es.cm.dam.dos.pmdm.practica14.modelo.ElementoCarrito;
+import es.cm.dam.dos.pmdm.practica14.modelo.Producto;
 
 public class CarritoRepository {
 
@@ -23,9 +25,22 @@ public class CarritoRepository {
      */
     public void anadirAlCarrito(long idUsuario, long idProducto) {
         SQLiteDatabase db = helper.getWritableDatabase();
-        // TODO: Comprobar si ya existe una fila para ese usuario y producto
-        // TODO: Si existe, UPDATE cantidad = cantidad + 1
-        // TODO: Si no existe, INSERT con cantidad = 1
+
+        String[] argumentos = {idUsuario+"", idProducto+""};
+        Cursor cursor = db.rawQuery("select * from Carrito where id_usuario = ? and id_producto = ?", argumentos);
+
+        if(cursor!=null && cursor.moveToFirst()){
+            int cantidad = cursor.getInt(cursor.getColumnIndexOrThrow("cantidad"));
+            cantidad++;
+
+            String[] argumentosActualizar = {cantidad+"", idUsuario+"", idProducto+""};
+
+            db.rawQuery("update Carrito set cantidad = ? where id_usuario = ? and id_producto = ?", argumentosActualizar);
+        }
+        else{
+            String[] argumentosInsertar = {idUsuario+"", idProducto+"", "1"};
+            db.rawQuery("insert into Carrito values(?,?,?)", argumentosInsertar);
+        }
     }
 
     /**
